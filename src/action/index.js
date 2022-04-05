@@ -1,5 +1,8 @@
+import md5 from 'crypto-js/md5';
+
 export const PLAYER_LOGIN = 'PLAYER_LOGIN';
 export const GET_PLAYER_TOKEN = 'GET_PLAYER_TOKEN';
+export const SET_PLAYER_AVATAR = 'SET_PLAYER_AVATAR';
 
 export const userLogin = (payload) => ({
   type: PLAYER_LOGIN,
@@ -20,5 +23,18 @@ export function fetchAPIAction() {
       token: data.token,
     };
     dispatch(getPlayerToken(objeto));
+  };
+}
+
+export const setPlayerAvatar = (avatar) => ({
+  type: SET_PLAYER_AVATAR,
+  avatar,
+});
+
+export function fetchGravatar() {
+  return async (dispatch, getState) => {
+    const hash = md5(getState().player.gravatarEmail).toString();
+    const URL = `https://www.gravatar.com/avatar/${hash}`;
+    dispatch(setPlayerAvatar(URL));
   };
 }

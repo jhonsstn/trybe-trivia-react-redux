@@ -21,14 +21,11 @@ class Login extends React.Component {
   handleDisable() {
     const { email, surname } = this.state;
     const isValid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
-    if (isValid && surname.length > 0) {
-      this.setState({ isDisable: false });
-    }
+    this.setState({ isDisable: !(isValid && surname.length > 0) });
   }
 
   validateValues({ target: { name, value } }) {
-    this.setState({ [name]: value });
-    this.handleDisable();
+    this.setState({ [name]: value }, this.handleDisable);
   }
 
   handleSubmit(event) {
