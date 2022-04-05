@@ -31,7 +31,8 @@ class Login extends React.Component {
     this.handleDisable();
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
+    event.preventDefault();
     const { getPlayerData, getPlayerToken, history } = this.props;
     getPlayerToken();
     getPlayerData(this.state);
@@ -40,35 +41,44 @@ class Login extends React.Component {
   }
 
   render() {
+    const { history } = this.props;
     const { isDisable, email, surname } = this.state;
 
     return (
-      <form>
-        <input
-          type="text"
-          name="surname"
-          placeholder="Seu nome:"
-          value={ surname }
-          data-testid="input-player-name"
-          onChange={ this.validateValues }
-        />
-        <input
-          type="text"
-          name="email"
-          placeholder="Seu email:"
-          value={ email }
-          data-testid="input-gravatar-email"
-          onChange={ this.validateValues }
-        />
+      <section>
+        <form onSubmit={ this.handleSubmit }>
+          <input
+            type="text"
+            name="surname"
+            placeholder="Seu nome:"
+            value={ surname }
+            data-testid="input-player-name"
+            onChange={ this.validateValues }
+          />
+          <input
+            type="text"
+            name="email"
+            placeholder="Seu email:"
+            value={ email }
+            data-testid="input-gravatar-email"
+            onChange={ this.validateValues }
+          />
+          <button
+            type="submit"
+            data-testid="btn-play"
+            disabled={ isDisable }
+          >
+            Play
+          </button>
+        </form>
         <button
           type="button"
-          data-testid="btn-play"
-          disabled={ isDisable }
-          onClick={ this.handleSubmit }
+          data-testid="btn-settings"
+          onClick={ () => history.push('/settings') }
         >
-          Play
+          Configurações
         </button>
-      </form>
+      </section>
     );
   }
 }
