@@ -1,11 +1,15 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import { connect } from 'react-redux';
+import { userLogin, fetchAPIAction } from '../action';
 
 class Login extends React.Component {
   constructor() {
     super();
 
     this.handleDisable = this.handleDisable.bind(this);
-    this.validetValues = this.validetValues.bind(this);
+    this.validateValues = this.validateValues.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {
       isDisable: true,
@@ -16,18 +20,23 @@ class Login extends React.Component {
 
   handleDisable() {
     const { email, surname } = this.state;
-
     const isValid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
-
     if (isValid && surname.length > 0) {
       this.setState({ isDisable: false });
     }
   }
 
-  validetValues({ target: { name, value } }) {
+  validateValues({ target: { name, value } }) {
     this.setState({ [name]: value });
-
     this.handleDisable();
+  }
+
+  handleSubmit() {
+    const { getPlayerData, getPlayerToken, history } = this.props;
+    getPlayerToken();
+    getPlayerData(this.state);
+
+    history.push('/game');
   }
 
   render() {
@@ -41,7 +50,7 @@ class Login extends React.Component {
           placeholder="Seu nome:"
           value={ surname }
           data-testid="input-player-name"
-          onChange={ this.validetValues }
+          onChange={ this.validateValues }
         />
         <input
           type="text"
@@ -49,12 +58,13 @@ class Login extends React.Component {
           placeholder="Seu email:"
           value={ email }
           data-testid="input-gravatar-email"
-          onChange={ this.validetValues }
+          onChange={ this.validateValues }
         />
         <button
           type="button"
           data-testid="btn-play"
           disabled={ isDisable }
+          onClick={ this.handleSubmit }
         >
           Play
         </button>
@@ -63,4 +73,17 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+Login.propTypes = {
+  getPlayerData: PropTypes.func.isRequired,
+  getPlayerToken: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  getPlayerData: (state) => dispatch(userLogin(state)),
+  getPlayerToken: () => dispatch(fetchAPIAction()),
+});
+
+export default connect(null, mapDispatchToProps)(Login);
