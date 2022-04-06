@@ -1,4 +1,4 @@
-import { PLAYER_LOGIN, SET_PLAYER_AVATAR } from '../action';
+import { PLAYER_LOGIN, SET_PLAYER_AVATAR } from '../actions/loginAction';
 
 const INITIAL_STATE = {
   name: '',

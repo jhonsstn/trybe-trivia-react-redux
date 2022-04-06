@@ -1,8 +1,6 @@
-import { GET_PLAYER_TOKEN } from '../action';
+import { GET_PLAYER_TOKEN } from '../actions/loginAction';
 
-const INITIAL_STATE = {
-  token: '',
-};
+const INITIAL_STATE = '';
 
 function token(state = INITIAL_STATE, action) {
   const { payload } = action;
