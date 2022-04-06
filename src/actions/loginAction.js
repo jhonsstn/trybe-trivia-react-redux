@@ -17,6 +17,7 @@ const getPlayerToken = (payload) => ({
 
 export const fetchTokenAction = () => async (dispatch) => {
   const object = await fetchToken();
+  localStorage.setItem('token', object.token);
   dispatch(getPlayerToken(object));
 };
 
