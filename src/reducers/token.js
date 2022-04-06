@@ -1,4 +1,4 @@
-import { GET_PLAYER_TOKEN } from '../action';
+import { GET_PLAYER_TOKEN } from '../actions/loginAction';
 
 const INITIAL_STATE = {
   token: '',
