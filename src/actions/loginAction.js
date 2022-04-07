@@ -1,4 +1,4 @@
-import fetchToken from '../api/opentdbHelper';
+import { fetchToken } from '../api/opentdbHelper';
 import getGravatarUrl from '../api/gravatarHelper';
 
 export const PLAYER_LOGIN = 'PLAYER_LOGIN';

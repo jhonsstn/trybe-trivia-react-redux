@@ -14,40 +14,40 @@ class Login extends React.Component {
     this.state = {
       isDisable: true,
       email: '',
-      surname: '',
+      name: '',
     };
   }
 
   inputsValidation() {
-    const { email, surname } = this.state;
+    const { email, name } = this.state;
     const isValid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
-    this.setState({ isDisable: !(isValid && surname.length > 0) });
+    this.setState({ isDisable: !(isValid && name.length > 0) });
   }
 
   inputsControl({ target: { name, value } }) {
     this.setState({ [name]: value }, this.inputsValidation);
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
-    const { getPlayerData, getPlayerToken, history } = this.props;
-    getPlayerToken();
-    getPlayerData(this.state);
+    const { setPlayerData, setPlayerToken, history } = this.props;
+    await setPlayerToken();
+    setPlayerData(this.state);
     history.push('/game');
   }
 
   render() {
     const { history } = this.props;
-    const { isDisable, email, surname } = this.state;
+    const { isDisable, email, name } = this.state;
 
     return (
       <section>
         <form onSubmit={ this.handleSubmit }>
           <input
             type="text"
-            name="surname"
+            name="name"
             placeholder="Seu nome:"
-            value={ surname }
+            value={ name }
             data-testid="input-player-name"
             onChange={ this.inputsControl }
           />
@@ -76,16 +76,16 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-  getPlayerData: PropTypes.func.isRequired,
-  getPlayerToken: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  setPlayerData: PropTypes.func.isRequired,
+  setPlayerToken: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  getPlayerData: (state) => dispatch(userLoginAction(state)),
-  getPlayerToken: () => dispatch(fetchTokenAction()),
+  setPlayerData: (state) => dispatch(userLoginAction(state)),
+  setPlayerToken: () => dispatch(fetchTokenAction()),
 });
 
 export default connect(null, mapDispatchToProps)(Login);

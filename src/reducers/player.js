@@ -12,7 +12,7 @@ function player(state = INITIAL_STATE, actions) {
   const { payload } = actions;
   switch (actions.type) {
   case PLAYER_LOGIN:
-    return { ...state, name: payload.surname, gravatarEmail: payload.email };
+    return { ...state, name: payload.name, gravatarEmail: payload.email };
   case SET_PLAYER_AVATAR:
     return { ...state, avatar: actions.avatar };
   default:
