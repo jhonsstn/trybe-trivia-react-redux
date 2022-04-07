@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchQuestion } from '../api/opentdbHelper';
+import Loading from './Loading';
 
 class Question extends React.Component {
   constructor() {
@@ -53,10 +54,12 @@ class Question extends React.Component {
   };
 
   renderAnswers = (question) => {
-    const { incorrect_answers: incorrect, correct_answer: correct } = question;
-    const answers = this.shuffleArray([...incorrect, correct]);
-
-    console.log(question.category);
+    // if (question === undefined) return console.log(question);
+    // const [incorrect_answers: incorrect, correct_answer: correct] = question;
+    const answers = this.shuffleArray([
+      ...question.incorrect_answers,
+      question.correct_answer,
+    ]);
 
     let answerIndex = 0;
     return answers.map((answer) => {
@@ -76,18 +79,19 @@ class Question extends React.Component {
   render() {
     const { questions, index, loading } = this.state;
 
-    if (loading) return 'Loading';
-    // App quebra se retirar esta verificação
-    if (questions.length === 0) return 'Loading';
-    return (
-      <div>
-        <h3 data-testid="question-category">{questions[index]?.category}</h3>
-        <p data-testid="question-text">{questions[index]?.question}</p>
-
-        {this.renderAnswers(questions[index])}
-
-        <input type="button" value="next" onClick={ this.nextQuestion } />
-      </div>
+    return loading ? (
+      <Loading />
+    ) : (
+      questions.length > 0 && (
+        <div>
+          <h3 data-testid="question-category">{questions[index].category}</h3>
+          <p data-testid="question-text">{questions[index].question}</p>
+          <div data-testid="answer-options">
+            {this.renderAnswers(questions[index])}
+          </div>
+          <input type="button" value="next" onClick={ this.nextQuestion } />
+        </div>
+      )
     );
   }
 }
