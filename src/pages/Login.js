@@ -15,7 +15,6 @@ class Login extends React.Component {
       isDisable: true,
       email: '',
       name: '',
-      redirect: false,
     };
   }
 
@@ -29,15 +28,12 @@ class Login extends React.Component {
     this.setState({ [name]: value }, this.inputsValidation);
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
     const { setPlayerData, setPlayerToken, history } = this.props;
-    setPlayerToken().then(() => history.push('/game'));
+    await setPlayerToken();
     setPlayerData(this.state);
-
-    this.setState({
-      redirect: true,
-    });
+    history.push('/game');
   }
 
   render() {

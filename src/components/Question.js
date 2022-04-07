@@ -18,10 +18,6 @@ class Question extends React.Component {
     this.fetchQuestions();
   }
 
-  // getKeyByValue(object, value) {
-  //   Object.keys(object).find((key) => object[key] === value);
-  // }
-
   fetchQuestions = async () => {
     const { token } = this.props;
     this.setState({
@@ -48,14 +44,17 @@ class Question extends React.Component {
   };
 
   nextQuestion = () => {
-    this.setState((prevState) => ({
-      index: prevState.index + 1,
-    }));
+    const { index } = this.state;
+    const maxNext = 4;
+
+    if (index < maxNext) {
+      this.setState((prevState) => ({
+        index: prevState.index + 1,
+      }));
+    }
   };
 
   renderAnswers = (question) => {
-    // if (question === undefined) return console.log(question);
-    // const [incorrect_answers: incorrect, correct_answer: correct] = question;
     const answers = this.shuffleArray([
       ...question.incorrect_answers,
       question.correct_answer,
@@ -71,7 +70,9 @@ class Question extends React.Component {
         answerIndex += 1;
       }
       return (
-        <input data-testid={ id } key={ answer } type="button" value={ answer } />
+        <button type="button" data-testid={ id } key={ answer } value={ answer }>
+          {answer}
+        </button>
       );
     });
   };
