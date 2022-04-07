@@ -4,13 +4,20 @@ import { connect } from 'react-redux';
 import { fetchQuestion } from '../api/opentdbHelper';
 import Loading from './Loading';
 
+const SECOND = 1000;
+
 class Question extends React.Component {
   constructor() {
     super();
+
+    this.time = 29;
+    this.timer = 0;
+
     this.state = {
       index: 0,
       questions: [],
-      loading: false,
+      replied: false,
+      loading: true,
     };
   }
 
@@ -18,21 +25,23 @@ class Question extends React.Component {
     this.fetchQuestions();
   }
 
+  startTimer = () => {
+    this.timer = setInterval(() => {
+      console.log(this.time);
+      if (this.time === 0) {
+        this.setState({ replied: true });
+        clearInterval(this.timer);
+      }
+      this.time -= 1;
+    }, SECOND);
+  }
+
   fetchQuestions = async () => {
     const { token } = this.props;
-    this.setState({
-      loading: true,
-    });
     const data = await fetchQuestion(token);
+    this.setState({ questions: data, loading: false });
 
-    this.setState(
-      {
-        questions: data,
-      },
-      this.setState({
-        loading: false,
-      }),
-    );
+    this.startTimer();
   };
 
   shuffleArray = (array) => {
@@ -50,11 +59,29 @@ class Question extends React.Component {
     if (index < maxNext) {
       this.setState((prevState) => ({
         index: prevState.index + 1,
-      }));
+        replied: false,
+      }), this.startTimer);
     }
   };
 
-  renderAnswers = (question) => {
+  handleAnswer = ({ target }) => {
+    const siblings = target.parentElement.childNodes;
+    const correct = '3px solid rgb(6, 240, 15)';
+    const wrong = '3px solid rgb(255, 0, 0)';
+    siblings.forEach((element) => {
+      if (element.id === 'correct-answer') {
+        element.style.border = correct;
+      } else {
+        element.style.border = wrong;
+      }
+    });
+
+    this.time = 29;
+    this.setState({ replied: true });
+    clearInterval(this.timer);
+  };
+
+  renderAnswers = (question, replied) => {
     const answers = this.shuffleArray([
       ...question.incorrect_answers,
       question.correct_answer,
@@ -70,7 +97,15 @@ class Question extends React.Component {
         answerIndex += 1;
       }
       return (
-        <button type="button" data-testid={ id } key={ answer } value={ answer }>
+        <button
+          type="button"
+          data-testid={ id }
+          id={ id }
+          key={ answer }
+          value={ answer }
+          disabled={ replied }
+          onClick={ this.handleAnswer }
+        >
           {answer}
         </button>
       );
@@ -78,7 +113,7 @@ class Question extends React.Component {
   };
 
   render() {
-    const { questions, index, loading } = this.state;
+    const { questions, replied, index, loading } = this.state;
 
     return loading ? (
       <Loading />
@@ -88,9 +123,14 @@ class Question extends React.Component {
           <h3 data-testid="question-category">{questions[index].category}</h3>
           <p data-testid="question-text">{questions[index].question}</p>
           <div data-testid="answer-options">
-            {this.renderAnswers(questions[index])}
+            {this.renderAnswers(questions[index], replied)}
           </div>
-          <input type="button" value="next" onClick={ this.nextQuestion } />
+          <input
+            data-testid="btn-next"
+            type="button"
+            value="next"
+            onClick={ this.nextQuestion }
+          />
         </div>
       )
     );
