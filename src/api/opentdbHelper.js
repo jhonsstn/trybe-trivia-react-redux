@@ -15,5 +15,3 @@ export const fetchQuestion = async (token) => {
     results: data.results,
   };
 };
-
-// export default fetchToken;

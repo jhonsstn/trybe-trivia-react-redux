@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { userLoginAction, fetchTokenAction } from '../actions/loginAction';
+import { fetchQuestionAction } from '../actions/gameAction';
 
 class Login extends React.Component {
   constructor() {
@@ -14,14 +16,15 @@ class Login extends React.Component {
     this.state = {
       isDisable: true,
       email: '',
-      surname: '',
+      name: '',
+      redirect: false,
     };
   }
 
   inputsValidation() {
-    const { email, surname } = this.state;
+    const { email, name } = this.state;
     const isValid = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email);
-    this.setState({ isDisable: !(isValid && surname.length > 0) });
+    this.setState({ isDisable: !(isValid && name.length > 0) });
   }
 
   inputsControl({ target: { name, value } }) {
@@ -30,24 +33,34 @@ class Login extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const { getPlayerData, getPlayerToken, history } = this.props;
-    getPlayerToken();
-    getPlayerData(this.state);
+    const { setPlayerData, setPlayerToken, setQuestions, history } = this.props;
+    setPlayerToken();
+    setQuestions();
+    setPlayerData(this.state);
+
     history.push('/game');
+
+    this.setState({
+      redirect: true,
+    });
   }
 
   render() {
-    const { history } = this.props;
-    const { isDisable, email, surname } = this.state;
+    const { history, getQuestions } = this.props;
+    const { isDisable, email, name, redirect } = this.state;
+
+    const isNotEmpty = getQuestions.length > 0;
+
+    if (isNotEmpty && redirect) return <Redirect to="/game" />;
 
     return (
       <section>
         <form onSubmit={ this.handleSubmit }>
           <input
             type="text"
-            name="surname"
+            name="name"
             placeholder="Seu nome:"
-            value={ surname }
+            value={ name }
             data-testid="input-player-name"
             onChange={ this.inputsControl }
           />
@@ -76,16 +89,29 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-  getPlayerData: PropTypes.func.isRequired,
-  getPlayerToken: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  setPlayerData: PropTypes.func.isRequired,
+  setPlayerToken: PropTypes.func.isRequired,
+  setQuestions: PropTypes.func.isRequired,
+  getQuestions: PropTypes.arrayOf(
+    PropTypes.shape({
+      incorrect_answers: PropTypes.arrayOf(PropTypes.string),
+      correct_answer: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  getPlayerData: (state) => dispatch(userLoginAction(state)),
-  getPlayerToken: () => dispatch(fetchTokenAction()),
+const mapStateToProps = (state) => ({
+  getQuestions: state.game.questions,
+  loaded: state.game.loaded,
 });
 
-export default connect(null, mapDispatchToProps)(Login);
+const mapDispatchToProps = (dispatch) => ({
+  setPlayerData: (state) => dispatch(userLoginAction(state)),
+  setPlayerToken: () => dispatch(fetchTokenAction()),
+  setQuestions: () => dispatch(fetchQuestionAction()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
