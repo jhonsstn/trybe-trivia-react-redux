@@ -54,6 +54,19 @@ class Question extends React.Component {
     }
   };
 
+  handleAnswer = ({ target }) => {
+    const siblings = target.parentElement.childNodes;
+    const correct = '3px solid rgb(6, 240, 15)';
+    const wrong = '3px solid rgb(255, 0, 0)';
+    siblings.forEach((element) => {
+      if (element.id === 'correct-answer') {
+        element.style.border = correct;
+      } else {
+        element.style.border = wrong;
+      }
+    });
+  };
+
   renderAnswers = (question) => {
     const answers = this.shuffleArray([
       ...question.incorrect_answers,
@@ -70,7 +83,14 @@ class Question extends React.Component {
         answerIndex += 1;
       }
       return (
-        <button type="button" data-testid={ id } key={ answer } value={ answer }>
+        <button
+          type="button"
+          data-testid={ id }
+          id={ id }
+          key={ answer }
+          value={ answer }
+          onClick={ this.handleAnswer }
+        >
           {answer}
         </button>
       );
@@ -90,7 +110,12 @@ class Question extends React.Component {
           <div data-testid="answer-options">
             {this.renderAnswers(questions[index])}
           </div>
-          <input type="button" value="next" onClick={ this.nextQuestion } />
+          <input
+            data-testid="btn-next"
+            type="button"
+            value="next"
+            onClick={ this.nextQuestion }
+          />
         </div>
       )
     );
