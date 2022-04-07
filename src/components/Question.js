@@ -18,9 +18,9 @@ class Question extends React.Component {
     this.fetchQuestions();
   }
 
-  getKeyByValue(object, value) {
-    Object.keys(object).find((key) => object[key] === value);
-  }
+  // getKeyByValue(object, value) {
+  //   Object.keys(object).find((key) => object[key] === value);
+  // }
 
   fetchQuestions = async () => {
     const { token } = this.props;
@@ -64,7 +64,7 @@ class Question extends React.Component {
     let answerIndex = 0;
     return answers.map((answer) => {
       let id = '';
-      if (this.getKeyByValue(question, answer) === 'correct_answer') {
+      if (question.correct_answer === answer) {
         id = 'correct-answer';
       } else {
         id = `wrong-answer-${answerIndex}`;

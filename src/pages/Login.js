@@ -32,10 +32,8 @@ class Login extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const { setPlayerData, setPlayerToken, history } = this.props;
-    setPlayerToken();
+    setPlayerToken().then(() => history.push('/game'));
     setPlayerData(this.state);
-
-    history.push('/game');
 
     this.setState({
       redirect: true,
