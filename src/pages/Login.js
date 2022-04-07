@@ -1,9 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import { userLoginAction, fetchTokenAction } from '../actions/loginAction';
-import { fetchQuestionAction } from '../actions/gameAction';
 
 class Login extends React.Component {
   constructor() {
@@ -33,9 +31,8 @@ class Login extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const { setPlayerData, setPlayerToken, setQuestions, history } = this.props;
+    const { setPlayerData, setPlayerToken, history } = this.props;
     setPlayerToken();
-    setQuestions();
     setPlayerData(this.state);
 
     history.push('/game');
@@ -46,12 +43,8 @@ class Login extends React.Component {
   }
 
   render() {
-    const { history, getQuestions } = this.props;
-    const { isDisable, email, name, redirect } = this.state;
-
-    const isNotEmpty = getQuestions.length > 0;
-
-    if (isNotEmpty && redirect) return <Redirect to="/game" />;
+    const { history } = this.props;
+    const { isDisable, email, name } = this.state;
 
     return (
       <section>
@@ -94,24 +87,11 @@ Login.propTypes = {
   }).isRequired,
   setPlayerData: PropTypes.func.isRequired,
   setPlayerToken: PropTypes.func.isRequired,
-  setQuestions: PropTypes.func.isRequired,
-  getQuestions: PropTypes.arrayOf(
-    PropTypes.shape({
-      incorrect_answers: PropTypes.arrayOf(PropTypes.string),
-      correct_answer: PropTypes.string,
-    }),
-  ).isRequired,
 };
-
-const mapStateToProps = (state) => ({
-  getQuestions: state.game.questions,
-  loaded: state.game.loaded,
-});
 
 const mapDispatchToProps = (dispatch) => ({
   setPlayerData: (state) => dispatch(userLoginAction(state)),
   setPlayerToken: () => dispatch(fetchTokenAction()),
-  setQuestions: () => dispatch(fetchQuestionAction()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(null, mapDispatchToProps)(Login);
