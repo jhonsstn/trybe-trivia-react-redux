@@ -5,12 +5,13 @@ import Header from '../components/Header';
 
 class Feedback extends React.Component {
   render() {
-    const { assertions } = this.props;
+    const { assertions, score } = this.props;
     return (
       <>
-        <h3 data-testid="feedback-text">Feedback</h3>
         <Header />
         <section>
+          <p data-testid="feedback-total-score">{ score }</p>
+          <p data-testid="feedback-total-question">{ assertions }</p>
           { assertions > 2
             ? <p data-testid="feedback-text">Well Done!</p>
             : <p data-testid="feedback-text">Could be better...</p> }
@@ -21,11 +22,13 @@ class Feedback extends React.Component {
 }
 
 Feedback.propTypes = {
-  assertions: PropTypes.func.isRequired,
+  assertions: PropTypes.number.isRequired,
+  score: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   assertions: state.player.assertions,
+  score: state.player.score,
 });
 
 export default connect(mapStateToProps)(Feedback);
