@@ -1,4 +1,5 @@
 import { PLAYER_LOGIN, SET_PLAYER_AVATAR } from '../actions/loginAction';
+import { ADD_SCORE } from '../actions/gameAction';
 
 const INITIAL_STATE = {
   name: '',
@@ -15,6 +16,8 @@ function player(state = INITIAL_STATE, actions) {
     return { ...state, name: payload.name, gravatarEmail: payload.email };
   case SET_PLAYER_AVATAR:
     return { ...state, avatar: actions.avatar };
+  case ADD_SCORE:
+    return { ...state, score: state.score + actions.points };
   default:
     return state;
   }
