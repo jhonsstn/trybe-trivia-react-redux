@@ -41,7 +41,7 @@ class Login extends React.Component {
     const { isDisable, email, name } = this.state;
 
     return (
-      <section>
+      <section className="login__container">
         <form onSubmit={ this.handleSubmit }>
           <input
             type="text"
