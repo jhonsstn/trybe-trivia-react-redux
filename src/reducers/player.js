@@ -17,7 +17,11 @@ function player(state = INITIAL_STATE, actions) {
   case SET_PLAYER_AVATAR:
     return { ...state, avatar: actions.avatar };
   case ADD_SCORE:
-    return { ...state, score: state.score + actions.points };
+    return {
+      ...state,
+      score: state.score + actions.points,
+      assertions: state.assertions + 1,
+    };
   default:
     return state;
   }

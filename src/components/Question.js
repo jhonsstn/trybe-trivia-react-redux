@@ -55,14 +55,15 @@ class Question extends React.Component {
   };
 
   fetchQuestions = async () => {
+    const { index } = this.state;
     const { token } = this.props;
     const data = await fetchQuestion(token);
     this.setState({
       questions: data,
       loading: false,
       shuffledAnswers: this.shuffleArray([
-        ...data[0].incorrect_answers,
-        data[0].correct_answer,
+        ...data[index].incorrect_answers,
+        data[index].correct_answer,
       ]),
     }, this.startTimer);
   };
