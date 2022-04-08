@@ -11,3 +11,71 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.question-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.question-container > * {
+  margin: 0;
+}
+
+.answer-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 250px;
+}
+
+.answer-input {
+  border: 3px solid black;
+  border-radius: 10px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  font-size: 0.8em;
+  padding: 10px 20px;
+  transition-duration: 200ms;
+}
+
+.answer-input:hover {
+  background-color: black;
+  color: white;
+}
+
+.replied > .answer-input {
+  background-color: rgb(255, 192, 192);
+  border-color: red;
+  color: red;
+  cursor: no-drop;
+}
+
+.replied > .answer-input[id='correct-answer'] {
+  background-color: rgb(0, 32, 0);
+  border-color: rgb(6, 240, 15);
+  color: rgb(6, 240, 15);
+}
+
+.next-question-btn {
+  border: 3px solid midnightblue;
+  border-radius: 10px;
+  background-color: midnightblue;
+  color: white;
+  cursor: pointer;
+  font-size: 0.8em;
+  min-width: 250px;
+  padding: 10px 20px;
+  transition-duration: 200ms;
+}
+
+.next-question-btn.hidden {
+  display: none;
+}
+
+.next-question-btn:hover {
+  background-color: white;
+  color: midnightblue;
+}

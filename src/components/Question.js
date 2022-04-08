@@ -2,22 +2,32 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchQuestion } from '../api/opentdbHelper';
+import { addScore } from '../actions/gameAction';
 import Loading from './Loading';
 
+const MAX_QUESTIONS = 4;
+const CORRECT_ANSWER = 'correct-answer';
 const SECOND = 1000;
+const DEFAULT_POINT = 10;
+const SCORE_BOARD = {
+  easy: 1,
+  medium: 2,
+  hard: 3,
+};
 
 class Question extends React.Component {
   constructor() {
     super();
 
-    this.time = 29;
     this.timer = 0;
 
     this.state = {
       index: 0,
+      time: 30,
       questions: [],
       replied: false,
       loading: true,
+      shuffledAnswers: [],
     };
   }
 
@@ -27,21 +37,13 @@ class Question extends React.Component {
 
   startTimer = () => {
     this.timer = setInterval(() => {
-      console.log(this.time);
-      if (this.time === 0) {
+      const { time } = this.state;
+      if (time === 1) {
         this.setState({ replied: true });
         clearInterval(this.timer);
       }
-      this.time -= 1;
+      this.setState({ time: time - 1 });
     }, SECOND);
-  }
-
-  fetchQuestions = async () => {
-    const { token } = this.props;
-    const data = await fetchQuestion(token);
-    this.setState({ questions: data, loading: false });
-
-    this.startTimer();
   };
 
   shuffleArray = (array) => {
@@ -52,46 +54,58 @@ class Question extends React.Component {
     return array;
   };
 
-  nextQuestion = () => {
-    const { index } = this.state;
-    const maxNext = 4;
+  fetchQuestions = async () => {
+    const { token } = this.props;
+    const data = await fetchQuestion(token);
+    this.setState({
+      questions: data,
+      loading: false,
+      shuffledAnswers: this.shuffleArray([
+        ...data[0].incorrect_answers,
+        data[0].correct_answer,
+      ]),
+    }, this.startTimer);
+  };
 
-    if (index < maxNext) {
-      this.setState((prevState) => ({
-        index: prevState.index + 1,
+  nextQuestion = () => {
+    const { history } = this.props;
+    const { index, questions } = this.state;
+
+    if (index < MAX_QUESTIONS) {
+      this.setState({
+        index: index + 1,
+        time: 29,
         replied: false,
-      }), this.startTimer);
+        shuffledAnswers: this.shuffleArray([
+          ...questions[index + 1].incorrect_answers,
+          questions[index + 1].correct_answer,
+        ]),
+      }, this.startTimer);
+    } else {
+      history.push('/feedback');
     }
   };
 
-  handleAnswer = ({ target }) => {
-    const siblings = target.parentElement.childNodes;
-    const correct = '3px solid rgb(6, 240, 15)';
-    const wrong = '3px solid rgb(255, 0, 0)';
-    siblings.forEach((element) => {
-      if (element.id === 'correct-answer') {
-        element.style.border = correct;
-      } else {
-        element.style.border = wrong;
-      }
-    });
+  handleAnswer = (target, question) => {
+    const { addPlayerScore } = this.props;
+    const { time } = this.state;
 
-    this.time = 29;
+    if (target.id === CORRECT_ANSWER) {
+      addPlayerScore(DEFAULT_POINT + (time * SCORE_BOARD[question.difficulty]));
+    }
+
     this.setState({ replied: true });
     clearInterval(this.timer);
   };
 
   renderAnswers = (question, replied) => {
-    const answers = this.shuffleArray([
-      ...question.incorrect_answers,
-      question.correct_answer,
-    ]);
+    const { shuffledAnswers } = this.state;
 
     let answerIndex = 0;
-    return answers.map((answer) => {
+    return shuffledAnswers.map((answer) => {
       let id = '';
       if (question.correct_answer === answer) {
-        id = 'correct-answer';
+        id = CORRECT_ANSWER;
       } else {
         id = `wrong-answer-${answerIndex}`;
         answerIndex += 1;
@@ -99,12 +113,13 @@ class Question extends React.Component {
       return (
         <button
           type="button"
+          className="answer-input"
           data-testid={ id }
           id={ id }
           key={ answer }
           value={ answer }
           disabled={ replied }
-          onClick={ this.handleAnswer }
+          onClick={ ({ target }) => this.handleAnswer(target, question) }
         >
           {answer}
         </button>
@@ -113,25 +128,33 @@ class Question extends React.Component {
   };
 
   render() {
-    const { questions, replied, index, loading } = this.state;
+    const { questions, time, replied, index, loading } = this.state;
 
     return loading ? (
       <Loading />
     ) : (
       questions.length > 0 && (
-        <div>
+        <section className="question-container">
+          <span>
+            {time}
+          </span>
           <h3 data-testid="question-category">{questions[index].category}</h3>
           <p data-testid="question-text">{questions[index].question}</p>
-          <div data-testid="answer-options">
+          <div
+            className={ `answer-input-container${replied ? ' replied' : ''}` }
+            data-testid="answer-options"
+          >
             {this.renderAnswers(questions[index], replied)}
           </div>
           <input
             data-testid="btn-next"
+            className={ `next-question-btn${!replied ? ' hidden' : ''}` }
+            disabled={ !replied }
             type="button"
-            value="next"
+            value={ index < MAX_QUESTIONS ? 'Próxima Pergunta' : 'Finalizar' }
             onClick={ this.nextQuestion }
           />
-        </div>
+        </section>
       )
     );
   }
@@ -139,10 +162,18 @@ class Question extends React.Component {
 
 Question.propTypes = {
   token: PropTypes.string.isRequired,
+  addPlayerScore: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 const mapStateToProps = (state) => ({
   token: state.token,
 });
 
-export default connect(mapStateToProps)(Question);
+const mapDispatchToProps = (dispatch) => ({
+  addPlayerScore: (points) => dispatch(addScore(points)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Question);
