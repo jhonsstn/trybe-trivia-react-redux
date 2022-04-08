@@ -3,8 +3,13 @@
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 20vmin;
+  margin-top: 100px;
   pointer-events: none;
+}
+
+.login__container {
+  margin-top: 100px;
 }
 
 .red-border {
@@ -29,7 +34,7 @@
   display: flex;
   flex-direction: column;
   font-size: calc(10px + 2vmin);
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 100vh;
 }
 
