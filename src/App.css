@@ -55,9 +55,20 @@
 }
 
 .feedback-container {
-  background-color: red;
-  height: calc(100vh - 70px);
-  margin-top: 70px;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: fit-content;
+  left: 50%;
+  margin: 70px auto 0;
+  padding: 20px 50px;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, calc(-50% - 70px));
+  width: fit-content;
 }
 
 .settings-container > div {
@@ -172,7 +183,7 @@
 
 .settings-btn:after {
   background-color: black;
-  bottom: 0.6em;
+  bottom: 0;
   content: '';
   height: 2px;
   left: 13%;
