@@ -24,7 +24,7 @@ class Ranking extends Component {
   render() {
     const { ranking } = this.state;
     return (
-      <>
+      <section className="ranking-container">
         <h3 data-testid="ranking-title">Ranking</h3>
         {ranking.map((player, index) => (
           <div key={ player.name }>
@@ -33,9 +33,14 @@ class Ranking extends Component {
           </div>
         ))}
         <Link to="/">
-          <input data-testid="btn-go-home" type="button" value="Login" />
+          <input
+            className="default-btn"
+            data-testid="btn-go-home"
+            type="button"
+            value="Login"
+          />
         </Link>
-      </>
+      </section>
     );
   }
 }
