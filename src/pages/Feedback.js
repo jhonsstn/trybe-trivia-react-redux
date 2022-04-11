@@ -53,7 +53,7 @@ class Feedback extends React.Component {
             </Link>
             <Link to="/ranking">
               <input
-                className="settings-btn"
+                className="default-btn"
                 data-testid="btn-ranking"
                 type="button"
                 value="Ranking"

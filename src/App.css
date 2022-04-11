@@ -71,6 +71,21 @@
   width: fit-content;
 }
 
+.feedback-container > :last-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.feedback-container > :last-child > * {
+  min-width: 150px;
+  width: calc(50% - 5px);
+}
+
+.feedback-container > :last-child > * > * {
+  width: 100%;
+}
+
 .settings-container > div {
   background-color: white;
   border-radius: 20px;
