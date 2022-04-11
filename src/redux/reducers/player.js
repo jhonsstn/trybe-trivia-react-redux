@@ -1,5 +1,4 @@
-import { PLAYER_LOGIN, SET_PLAYER_AVATAR } from '../actions/loginAction';
-import { ADD_SCORE } from '../actions/gameAction';
+import { PLAYER_LOGIN, SET_PLAYER_AVATAR, ADD_SCORE } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
@@ -9,7 +8,7 @@ const INITIAL_STATE = {
   avatar: '',
 };
 
-function player(state = INITIAL_STATE, actions) {
+const player = (state = INITIAL_STATE, actions) => {
   const { payload } = actions;
   switch (actions.type) {
   case PLAYER_LOGIN:
@@ -30,6 +29,6 @@ function player(state = INITIAL_STATE, actions) {
   default:
     return state;
   }
-}
+};
 
 export default player;
