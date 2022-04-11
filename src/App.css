@@ -1,15 +1,197 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 20vmin;
-  margin-top: 100px;
-  pointer-events: none;
+.general-container {
+  background-color: #282c34;
+  height: 100vh;
+  overflow: auto;
 }
 
 .login__container {
-  margin-top: 100px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 40px);
+  justify-content: center;
+  padding: 20px;
+}
+
+.logo {
+  margin: auto;
+  min-width: 150px;
+  pointer-events: none;
+  width: 90%;
+}
+
+.header-logo {
+  height: 100%;
+}
+
+.header-container {
+  align-items: center;
+  background-color: #49505e;
+  box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-wrap: wrap;
+  height: 50px;
+  justify-content: space-between;
+  left: 0;
+  padding: 10px 20px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.header-container > :nth-child( 1 ) {
+  background-color: white;
+  border-radius: 50%;
+  height: 100%;
+  padding: 2px;
+}
+
+.header-container > :nth-child( 3 ) {
+  align-items: flex-end;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-weight: 700;
+}
+
+.feedback-container {
+  background-color: red;
+  height: calc(100vh - 70px);
+  margin-top: 70px;
+}
+
+.settings-container > div {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 350px;
+  overflow: auto;
+  padding: 20px;
+  width: calc(90% - 40px);
+}
+
+.settings-container > div > * {
+  margin: 0;
+  min-width: 150px;
+  width: 100%;
+}
+
+.settings-container > div > h1 {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.settings-container > div > label > * {
+  border-radius: 5px;
+  font-size: 1em;
+  padding: 5px;
+  width: 100%;
+}
+
+.settings-container > div > :last-child {
+  margin-top: 40px;
+}
+
+.login__container > form {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  max-width: 350px;
+  overflow: auto;
+  padding: 20px;
+  width: calc(90% - 40px);
+}
+
+.login__container > form > :nth-child( 2 ) {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 150px;
+  width: 100%;
+}
+
+.login__container > form > :nth-child( 2 ) > * {
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 1em;
+  padding: 5px;
+}
+
+.login__container > form > :nth-child( 3 ) {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  min-width: 150px;
+  width: 100%;
+}
+
+.login__container > form > :nth-child( 3 ) > * {
+  min-width: 100px;
+  width: calc(50% - 10px);
+}
+
+.default-btn {
+  background-color: transparent;
+  border: 3px solid black;
+  border-radius: 10px;
+  color: black;
+  cursor: pointer;
+  font-size: 1.1em;
+  padding: 10px;
+  transition-duration: 200ms;
+}
+
+.default-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.default-btn:hover:not( :disabled ) {
+  background-color: black;
+  color: white;
+}
+
+.settings-btn {
+  background-color: transparent;
+  border: none;
+  color: black;
+  cursor: pointer;
+  font-size: 1.1em;
+  padding: 10px;
+  position: relative;
+  transition-duration: 200ms;
+}
+
+.settings-btn:after {
+  background-color: black;
+  bottom: 0.6em;
+  content: '';
+  height: 2px;
+  left: 13%;
+  position: absolute;
+  transition-duration: 200ms;
+  width: 0;
+}
+
+.settings-btn:hover:after {
+  width: 74%;
+}
+
+.settings-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 40px);
+  justify-content: center;
+  padding: 20px;
 }
 
 .red-border {
@@ -22,7 +204,7 @@
 
 @media ( prefers-reduced-motion : no-preference ) {
 
-  .App-logo {
+  .logo {
     animation: shake infinite 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   }
 }
@@ -58,5 +240,19 @@
 
   40%, 60% {
     transform: translate3d(4px, 0, 0);
+  }
+}
+
+@media ( max-width : 288px ) {
+
+  .login__container > form > :nth-child( 3 ) > * {
+    width: 100%;
+  }
+}
+
+@media ( max-height : 410px ) {
+
+  .login__container {
+    justify-content: flex-start;
   }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getGravatarAction } from '../redux/actions';
+import logo from '../trivia.png';
 
 class Header extends React.Component {
   componentDidMount() {
@@ -13,10 +14,16 @@ class Header extends React.Component {
     const { name, score, avatar } = this.props;
     return (
       <header>
-        <section>
+        <section className="header-container">
           <img src={ avatar } alt="Avatar" data-testid="header-profile-picture" />
-          <span data-testid="header-player-name">{name}</span>
-          <span data-testid="header-score">{score}</span>
+          <img src={ logo } className="header-logo" alt="logo" />
+          <div>
+            <span data-testid="header-player-name">{name}</span>
+            <div>
+              <span>Score: </span>
+              <span data-testid="header-score">{score}</span>
+            </div>
+          </div>
         </section>
       </header>
     );

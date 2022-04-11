@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { userLoginAction, fetchTokenAction } from '../redux/actions';
+import logo from '../trivia.png';
 
 class Login extends React.Component {
   constructor() {
@@ -43,33 +44,44 @@ class Login extends React.Component {
     return (
       <section className="login__container">
         <form onSubmit={ this.handleSubmit }>
-          <input
-            type="text"
-            name="name"
-            placeholder="Seu nome:"
-            value={ name }
-            data-testid="input-player-name"
-            onChange={ this.inputsControl }
-          />
-          <input
-            type="text"
-            name="email"
-            placeholder="Seu email:"
-            value={ email }
-            data-testid="input-gravatar-email"
-            onChange={ this.inputsControl }
-          />
-          <button type="submit" data-testid="btn-play" disabled={ isDisable }>
-            Play
-          </button>
+          <img src={ logo } className="logo" alt="logo" />
+          <div>
+            <input
+              type="text"
+              name="name"
+              placeholder="Insira seu nome"
+              value={ name }
+              data-testid="input-player-name"
+              onChange={ this.inputsControl }
+            />
+            <input
+              type="text"
+              name="email"
+              placeholder="Insira seu email"
+              value={ email }
+              data-testid="input-gravatar-email"
+              onChange={ this.inputsControl }
+            />
+          </div>
+          <div>
+            <button
+              className="settings-btn"
+              type="button"
+              data-testid="btn-settings"
+              onClick={ () => history.push('/settings') }
+            >
+              Configurações
+            </button>
+            <button
+              className="default-btn"
+              type="submit"
+              data-testid="btn-play"
+              disabled={ isDisable }
+            >
+              Play
+            </button>
+          </div>
         </form>
-        <button
-          type="button"
-          data-testid="btn-settings"
-          onClick={ () => history.push('/settings') }
-        >
-          Configurações
-        </button>
       </section>
     );
   }

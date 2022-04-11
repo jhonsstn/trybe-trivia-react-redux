@@ -147,25 +147,27 @@ class Question extends React.Component {
     ) : (
       questions.length > 0 && (
         <section className="question-container">
-          <span>{time}</span>
-          <h3 data-testid="question-category">
-            {atob(questions[index].category)}
-          </h3>
-          <p data-testid="question-text">{atob(questions[index].question)}</p>
-          <div
-            className={ `answer-input-container${replied ? ' replied' : ''}` }
-            data-testid="answer-options"
-          >
-            {this.renderAnswers(questions[index], replied)}
+          <div>
+            <span>{time}</span>
+            <h3 data-testid="question-category">
+              {atob(questions[index].category)}
+            </h3>
+            <p data-testid="question-text">{atob(questions[index].question)}</p>
+            <div
+              className={ `answer-input-container${replied ? ' replied' : ''}` }
+              data-testid="answer-options"
+            >
+              {this.renderAnswers(questions[index], replied)}
+            </div>
+            <input
+              data-testid="btn-next"
+              className={ `next-question-btn${!replied ? ' hidden' : ''}` }
+              disabled={ !replied }
+              type="button"
+              value={ index < MAX_QUESTIONS ? 'Próxima Pergunta' : 'Finalizar' }
+              onClick={ this.nextQuestion }
+            />
           </div>
-          <input
-            data-testid="btn-next"
-            className={ `next-question-btn${!replied ? ' hidden' : ''}` }
-            disabled={ !replied }
-            type="button"
-            value={ index < MAX_QUESTIONS ? 'Próxima Pergunta' : 'Finalizar' }
-            onClick={ this.nextQuestion }
-          />
         </section>
       )
     );

@@ -28,24 +28,32 @@ class Feedback extends React.Component {
     return (
       <>
         <Header />
-        <section>
-          <p data-testid="feedback-total-score">{score}</p>
-          <p data-testid="feedback-total-question">{assertions}</p>
+        <section className="feedback-container">
+          <div>
+            <span>Pontuação total: </span>
+            <span data-testid="feedback-total-score">{score}</span>
+          </div>
+          <div>
+            <span>Questões acertadas: </span>
+            <span data-testid="feedback-total-question">{assertions}</span>
+          </div>
           {assertions > 2 ? (
-            <p data-testid="feedback-text">Well Done!</p>
+            <span data-testid="feedback-text">Well Done!</span>
           ) : (
-            <p data-testid="feedback-text">Could be better...</p>
+            <span data-testid="feedback-text">Could be better...</span>
           )}
-          <Link to="/">
-            <input
-              data-testid="btn-play-again"
-              type="button"
-              value="Play Again"
-            />
-          </Link>
-          <Link to="/ranking">
-            <input data-testid="btn-ranking" type="button" value="Ranking" />
-          </Link>
+          <div>
+            <Link to="/">
+              <input
+                data-testid="btn-play-again"
+                type="button"
+                value="Play Again"
+              />
+            </Link>
+            <Link to="/ranking">
+              <input data-testid="btn-ranking" type="button" value="Ranking" />
+            </Link>
+          </div>
         </section>
       </>
     );
