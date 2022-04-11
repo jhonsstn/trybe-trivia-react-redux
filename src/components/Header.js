@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getGravatarAction } from '../actions/loginAction';
+import { getGravatarAction } from '../redux/actions';
 
 class Header extends React.Component {
   componentDidMount() {
